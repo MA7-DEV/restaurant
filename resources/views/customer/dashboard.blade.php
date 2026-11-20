@@ -1,275 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account - GustoBite</title>
+<x-layouts.app title="My Account - GustoBite">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- الخلفية العامة -->
+    <div class="min-h-screen bg-[#FAF7F2] dark:bg-[#0A0A0A] py-12 transition-colors duration-500 relative overflow-hidden">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- توهج خلفي (Glow) في الدارك مود -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gold-500/5 dark:bg-gold-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 animate-fade-in-up">
 
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
+            <!-- 1. Welcome Banner (تأثير زجاجي مع تدرج) -->
+            <div class="relative overflow-hidden rounded-3xl bg-white/60 dark:bg-royal-900/40 backdrop-blur-xl border border-gray-200/50 dark:border-gold-500/20 shadow-xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] mb-8 p-8 md:p-10">
+                <!-- لمعة ذهبية -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gold-500/20 to-transparent rounded-full blur-3xl -mr-16 -mt-16"></div>
 
-        :root {
-            --primary: #2C5530;
-            --secondary: #D4A574;
-            --accent: #E8C39E;
-            --light: #FAF7F2;
-            --dark: #2C1810;
-        }
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="text-center md:text-left">
+                        <h1 class="text-3xl md:text-4xl font-serif text-gray-800 dark:text-white mb-2">
+                            Hello, <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-gold-400 dark:from-gold-400 dark:to-gold-600">{{ auth()->user()->name }}</span>
+                        </h1>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">Ready to order your favorite meal today?</p>
+                    </div>
+                    <a href="{{ route('menu') }}" class="group relative bg-gradient-to-r from-gold-600 to-gold-500 text-royal-900 px-8 py-3.5 rounded-2xl font-bold uppercase tracking-wide text-sm hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                        <i class="fas fa-utensils group-hover:rotate-12 transition-transform"></i> Order Now
+                    </a>
+                </div>
+            </div>
 
-        .card-customer {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid rgba(212, 165, 116, 0.2);
-            box-shadow: 0 4px 20px rgba(44, 24, 16, 0.05);
-            transition: all 0.3s ease;
-        }
+            <!-- 2. Quick Stats (كروت بتأثير Glassmorphism) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <!-- Card 1 -->
+                <div class="bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 dark:border-gold-500/10 hover:border-gold-500/40 dark:hover:border-gold-500/40 transition-all duration-300 group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fas fa-shopping-bag text-blue-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</p>
+                            <h3 class="text-2xl font-bold text-gray-800 dark:text-white">12</h3>
+                        </div>
+                    </div>
+                </div>
 
-        .card-customer:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(44, 24, 16, 0.1);
-        }
+                <!-- Card 2 -->
+                <div class="bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 dark:border-gold-500/10 hover:border-gold-500/40 dark:hover:border-gold-500/40 transition-all duration-300 group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-green-100 dark:bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fas fa-star text-green-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Loyalty Points</p>
+                            <h3 class="text-2xl font-bold text-gray-800 dark:text-white">450</h3>
+                        </div>
+                    </div>
+                </div>
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #4A7C59);
-            color: white;
-            padding: 10px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-        }
+                <!-- Card 3 -->
+                <div class="bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 dark:border-gold-500/10 hover:border-gold-500/40 dark:hover:border-gold-500/40 transition-all duration-300 group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fas fa-heart text-purple-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Favorite Dishes</p>
+                            <h3 class="text-2xl font-bold text-gray-800 dark:text-white">5</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 85, 48, 0.3);
-        }
+            <!-- 3. Recommended Meals -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-serif text-gray-800 dark:text-white">Recommended for You</h2>
+                    <a href="{{ route('menu') }}" class="text-sm font-bold text-gold-600 hover:text-gold-500 uppercase tracking-wider transition-colors">View Menu →</a>
+                </div>
 
-        .btn-secondary {
-            background: white;
-            border: 2px solid var(--secondary);
-            color: var(--secondary);
-            padding: 10px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach(\App\Models\Meal::with('category')->inRandomOrder()->take(4)->get() as $meal)
+                    <div class="group relative bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-200/50 dark:border-gold-500/10 hover:border-gold-500/40 dark:hover:border-gold-500/40 shadow-sm hover:shadow-xl dark:hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] transition-all duration-300">
 
-        .btn-secondary:hover {
-            background: var(--secondary);
-            color: white;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#2C5530] to-[#6BAF6B] flex items-center justify-center">
-                        <i class="fas fa-utensils text-white"></i>
+                        <!-- Image -->
+                        <div class="relative h-40 overflow-hidden bg-gray-100 dark:bg-royal-800">
+                            @if($meal->image_url)
+                                <img src="{{ $meal->image_url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            @else
+                                <div class="flex items-center justify-center h-full"><i class="fas fa-utensils text-gray-400 text-2xl"></i></div>
+                            @endif
+                            <!-- Gradient Overlay for Text readability -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-4 relative">
+                            <h3 class="font-serif text-lg text-gray-800 dark:text-white truncate group-hover:text-gold-500 transition-colors">{{ $meal->name }}</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-2">{{ $meal->category->name }}</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-lg font-bold text-gold-600 dark:text-gold-500">${{ number_format($meal->price, 2) }}</p>
+                                <a href="{{ route('menu') }}" class="w-8 h-8 rounded-full bg-gold-500/10 text-gold-500 flex items-center justify-center hover:bg-gold-500 hover:text-royal-900 transition-colors">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- 4. Account Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Edit Profile -->
+                <a href="{{ route('profile.edit') }}" class="group bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 dark:border-gold-500/10 hover:border-gold-500/40 transition-all duration-300 flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gold-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-cog text-gold-500 text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-xl text-gray-800">GustoBite</h1>
-                        <p class="text-sm text-gray-500">Welcome, {{ Auth::user()->name }}</p>
+                        <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition-colors">Edit Profile</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Update your personal information</p>
                     </div>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-[#2C5530]">
-                        <i class="fas fa-home mr-2"></i>
-                        Home
-                    </a>
-
-                    <a href="{{ route('menu') }}" class="text-gray-700 hover:text-[#2C5530]">
-                        <i class="fas fa-utensils mr-2"></i>
-                        Menu
-                    </a>
-
-                    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-[#2C5530]">
-                        <i class="fas fa-user mr-2"></i>
-                        Profile
-                    </a>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-sign-out-alt mr-2"></i>
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
-        <!-- Welcome Card -->
-        <div class="bg-gradient-to-r from-[#FAF7F2] to-[#FFF9F0] rounded-2xl p-8 border border-[#E8C39E]/30 mb-8">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h1 class="text-3xl font-bold text-[#2C1810] mb-2">Welcome back, {{ Auth::user()->name }}! 👋</h1>
-                    <p class="text-gray-600">Enjoy a unique dining experience with us</p>
-                </div>
-                <div class="w-16 h-16 rounded-full bg-gradient-to-r from-[#D4A574] to-[#E8C39E] flex items-center justify-center shadow-lg">
-                    <i class="fas fa-user text-2xl text-white"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <a href="{{ route('menu') }}" class="card-customer p-6 text-center">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-[#2C5530]/10 to-[#6BAF6B]/10 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-utensils text-2xl text-[#2C5530]"></i>
-                </div>
-                <h3 class="font-bold text-lg text-[#2C1810] mb-2">Browse Menu</h3>
-                <p class="text-sm text-gray-600">Discover our wide selection of dishes</p>
-            </a>
-
-            <a href="{{ route('profile.edit') }}" class="card-customer p-6 text-center">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-[#D4A574]/10 to-[#E8C39E]/10 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-user-edit text-2xl text-[#D4A574]"></i>
-                </div>
-                <h3 class="font-bold text-lg text-[#2C1810] mb-2">Edit Profile</h3>
-                <p class="text-sm text-gray-600">Update your personal information</p>
-            </a>
-
-            <div class="card-customer p-6 text-center">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-[#C41E3A]/10 to-[#D9455D]/10 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-history text-2xl text-[#C41E3A]"></i>
-                </div>
-                <h3 class="font-bold text-lg text-[#2C1810] mb-2">Order History</h3>
-                <p class="text-sm text-gray-600">View all your previous orders</p>
-                <span class="inline-block mt-2 text-xs bg-gray-100 px-3 py-1 rounded-full">Coming Soon</span>
-            </div>
-        </div>
-
-        <!-- Recent Orders (Placeholder) -->
-        <div class="card-customer p-6 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-[#2C1810]">Recent Orders</h2>
-                <a href="#" class="text-[#2C5530] text-sm font-medium">View All</a>
-            </div>
-
-            <div class="text-center py-8">
-                <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-shopping-cart text-gray-400 text-2xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-700 mb-2">No Previous Orders</h3>
-                <p class="text-gray-500 mb-6">You haven't placed any orders yet</p>
-                <a href="{{ route('menu') }}" class="btn-primary inline-flex items-center gap-2">
-                    <i class="fas fa-utensils"></i>
-                    Start Shopping Now
                 </a>
-            </div>
-        </div>
 
-        <!-- Features -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="card-customer p-6">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                        <i class="fas fa-shipping-fast text-green-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-[#2C1810]">Fast Delivery</h3>
-                        <p class="text-sm text-gray-500">Delivery within 30 minutes</p>
-                    </div>
-                </div>
-                <p class="text-gray-600">We guarantee your order arrives hot and fresh in the shortest possible time.</p>
+                <!-- Logout -->
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full group bg-white/60 dark:bg-royal-900/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 dark:border-red-500/10 hover:border-red-500/40 transition-all duration-300 flex items-center gap-4 text-left">
+                        <div class="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fas fa-sign-out-alt text-red-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-red-500 transition-colors">Logout</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Sign out of your account</p>
+                        </div>
+                    </button>
+                </form>
             </div>
 
-            <div class="card-customer p-6">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-star text-blue-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-[#2C1810]">Quality Guaranteed</h3>
-                        <p class="text-sm text-gray-500">Best Ingredients</p>
-                    </div>
-                </div>
-                <p class="text-gray-600">We use only fresh, high-quality ingredients in all our dishes.</p>
-            </div>
-        </div>
-
-        <!-- Special Offers -->
-        <div class="mt-8 p-6 bg-gradient-to-r from-[#2C5530] to-[#6BAF6B] rounded-2xl text-white">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h2 class="text-2xl font-bold mb-2">Special Offers!</h2>
-                    <p class="opacity-90">Get 20% off your first order using code: WELCOME20</p>
-                </div>
-                <button onclick="copyCouponCode()" class="btn-secondary bg-white text-[#2C5530] hover:bg-gray-100 whitespace-nowrap">
-                    <i class="fas fa-ticket-alt mr-2"></i>
-                    Copy Code
-                </button>
-            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
-        <div class="container mx-auto px-4">
-            <div class="text-center">
-                <p class="text-gray-600 text-sm">
-                    &copy; {{ date('Y') }} GustoBite Restaurant. All rights reserved.
-                    <span class="mx-2">•</span>
-                    <a href="#" class="text-[#2C5530] hover:text-[#1e3a23]">Terms & Conditions</a>
-                    <span class="mx-2">•</span>
-                    <a href="#" class="text-[#2C5530] hover:text-[#1e3a23]">Privacy Policy</a>
-                </p>
-                <div class="flex justify-center space-x-4 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-[#2C5530]">
-                        <i class="fab fa-facebook text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-[#2C5530]">
-                        <i class="fab fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-[#2C5530]">
-                        <i class="fab fa-instagram text-xl"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Copy coupon code
-        function copyCouponCode() {
-            const code = 'WELCOME20';
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Code copied: ' + code);
-            });
-        }
-
-        // Add hover animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card-customer');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-3px)';
-                });
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+</x-layouts.app>

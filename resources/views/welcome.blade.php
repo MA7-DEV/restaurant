@@ -1,318 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+<x-layouts.app title="Welcome to GustoBite Luxury">
 
-    <title>GustoBite | Modern Restaurant</title>
+    <!-- Hero Section with Background Image -->
+    <div class="relative min-h-screen flex items-center justify-center overflow-hidden">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Styles -->
-    <style>
-        .hero-gradient {
-            background: linear-gradient(135deg, #FAF7F2 0%, #F5EFE6 100%);
-        }
-
-        .feature-card {
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(212, 165, 116, 0.1);
-        }
-
-        .restaurant-logo {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .btn-restaurant {
-            background: linear-gradient(135deg, #2C5530, #4A7C59);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-restaurant:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(44, 85, 48, 0.3);
-        }
-
-        .btn-outline-restaurant {
-            border: 2px solid #D4A574;
-            color: #D4A574;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-outline-restaurant:hover {
-            background: #FAF7F2;
-        }
-
-        .bg-gradient-gold {
-            background: linear-gradient(135deg, #D4A574, #E8C39E);
-        }
-    </style>
-</head>
-
-<body class="font-sans antialiased hero-gradient">
-    <!-- Navigation -->
-    <header class="w-full">
-        @if (Route::has('login'))
-            <nav class="flex items-center justify-end gap-4 p-6">
-                @auth
-                    @if(auth()->user()->email === 'admin@restaurant.com' || auth()->user()->email === 'admin@laravel.com')
-                        <!-- Admin User -->
-                        <a href="{{ route('categories.index') }}"
-                           class="inline-block px-6 py-2.5 text-sm font-medium text-[#2C1810] border border-[#D4A574]/30 rounded-xl hover:border-[#D4A574] hover:bg-[#FAF7F2] transition-all duration-300">
-                            Admin Dashboard
-                        </a>
-                    @else
-                        <!-- Regular Customer -->
-                        <a href="{{ route('customer.dashboard') }}"
-                           class="inline-block px-6 py-2.5 text-sm font-medium text-[#2C1810] border border-[#D4A574]/30 rounded-xl hover:border-[#D4A574] hover:bg-[#FAF7F2] transition-all duration-300">
-                            My Account
-                        </a>
-                    @endif
-
-                    <a href="{{ route('menu') }}"
-                       class="btn-restaurant px-6 py-2.5 text-sm">
-                        View Menu
-                    </a>
-
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit"
-                                class="inline-block px-6 py-2.5 text-sm font-medium text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition-all duration-300">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}"
-                       class="inline-block px-6 py-2.5 text-sm font-medium text-[#2C1810] border border-[#D4A574]/30 rounded-xl hover:border-[#D4A574] hover:bg-[#FAF7F2] transition-all duration-300">
-                        Log in
-                    </a>
-
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}"
-                           class="btn-restaurant px-6 py-2.5 text-sm">
-                            Get Started
-                        </a>
-                    @endif
-                @endauth
-            </nav>
-        @endif
-    </header>
-
-    <!-- Hero Section -->
-    <main class="flex items-center justify-center min-h-[80vh] px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-4xl mx-auto">
-            <!-- Logo -->
-            <div class="restaurant-logo mb-8">
-                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-[#D4A574] to-[#E8C39E] flex items-center justify-center mx-auto shadow-2xl mb-6">
-                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-.891.552L3.236 6H2a1 1 0 00-1 1v2a1 1 0 001 1h1l2 6h10l2-6h1a1 1 0 001-1V7a1 1 0 00-1-1h-1.236L14.89 2.552A1 1 0 0014 2H6z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold text-[#2C1810] mb-4 font-['Playfair_Display']">
-                    Gusto<span class="text-[#D4A574]">Bite</span>
-                </h1>
-                <p class="text-xl text-gray-600 mb-8">Modern Dining Experience</p>
-            </div>
-
-            <!-- Tagline -->
-            <div class="mb-12">
-                <p class="text-2xl md:text-3xl text-gray-700 mb-6 leading-relaxed max-w-3xl mx-auto">
-                    Where <span class="text-[#D4A574] font-semibold">flavor</span> meets
-                    <span class="text-[#2C5530] font-semibold">perfection</span> in every bite
-                </p>
-            </div>
-
-            <!-- Features -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="feature-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg">
-                    <div class="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-semibold text-[#2C1810] mb-2">Personalized Experience</h3>
-                    <p class="text-sm text-gray-600">Create an account for personalized recommendations</p>
-                </div>
-
-                <div class="feature-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg">
-                    <div class="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-.891.552L3.236 6H2a1 1 0 00-1 1v2a1 1 0 001 1h1l2 6h10l2-6h1a1 1 0 001-1V7a1 1 0 00-1-1h-1.236L14.89 2.552A1 1 0 0014 2H6z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-semibold text-[#2C1810] mb-2">Exquisite Menu</h3>
-                    <p class="text-sm text-gray-600">Browse our carefully crafted selection of dishes</p>
-                </div>
-
-                <div class="feature-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg">
-                    <div class="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-semibold text-[#2C1810] mb-2">Secure & Reliable</h3>
-                    <p class="text-sm text-gray-600">Your data is protected with enterprise-grade security</p>
-                </div>
-            </div>
-
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                @auth
-                    @if(auth()->user()->email === 'admin@restaurant.com' || auth()->user()->email === 'admin@laravel.com')
-                        <!-- Admin CTA -->
-                        <a href="{{ route('categories.index') }}"
-                           class="btn-restaurant px-8 py-3 text-lg inline-flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                            </svg>
-                            Admin Dashboard
-                        </a>
-                    @else
-                        <!-- Customer CTA -->
-                        <a href="{{ route('menu') }}"
-                           class="btn-restaurant px-8 py-3 text-lg inline-flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
-                            </svg>
-                            Explore Menu
-                        </a>
-                    @endif
-
-                    <a href="{{ route('customer.dashboard') }}"
-                       class="btn-outline-restaurant px-8 py-3 text-lg inline-flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        My Account
-                    </a>
-                @else
-                    <a href="{{ route('login') }}"
-                       class="btn-restaurant px-8 py-3 text-lg inline-flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                        </svg>
-                        Sign In
-                    </a>
-                    <a href="{{ route('register') }}"
-                       class="btn-outline-restaurant px-8 py-3 text-lg inline-flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                        </svg>
-                        Create Account
-                    </a>
-                @endauth
-            </div>
-
-            <!-- Additional Info -->
-            <div class="mt-12 pt-8 border-t border-[#E8C39E]/30">
-                <p class="text-gray-600 mb-4">Already loving GustoBite? Join thousands of satisfied customers</p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-gray-500">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>No credit card required</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Free forever plan</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>24/7 support</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop"
+                 alt="Luxury Restaurant"
+                 class="w-full h-full object-cover opacity-30 dark:opacity-40">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-cream/90 via-cream/70 to-cream dark:from-royal-900/80 dark:via-royal-900/60 dark:to-royal-900 transition-colors duration-300"></div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="mt-20 py-8 border-t border-[#E8C39E]/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-600 text-sm">
-                &copy; {{ date('Y') }} GustoBite Restaurant. All rights reserved.
-                <span class="mx-2">•</span>
-                <a href="#" class="text-[#D4A574] hover:text-[#BC8A53]">Privacy Policy</a>
-                <span class="mx-2">•</span>
-                <a href="#" class="text-[#D4A574] hover:text-[#BC8A53]">Terms of Service</a>
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 md:px-6 max-w-5xl mx-auto pt-20 md:pt-24">
+
+            <!-- Badge -->
+            <div class="inline-block mb-4 md:mb-6 px-3 md:px-4 py-1 border border-gold-500/30 rounded-full bg-gold-500/5 backdrop-blur-sm animate-fade-in-up">
+                <span class="text-gold-500 text-[10px] md:text-xs font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase">Welcome to GustoBite</span>
+            </div>
+
+            <!-- Heading -->
+            <h1 class="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-brown dark:text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl animate-fade-in-up delay-100 transition-colors duration-300">
+                Experience <br class="hidden md:block">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 via-gold-500 to-gold-400 dark:from-gold-300 dark:via-gold-500 dark:to-gold-600 italic">True Luxury</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-brown/70 dark:text-gray-300 text-base sm:text-lg md:text-xl mb-8 md:mb-12 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200 transition-colors duration-300">
+                Indulge in a culinary masterpiece where every ingredient tells a story.
+                Reserve your table and savor the finest flavors crafted by our world-class chefs.
             </p>
-            <div class="mt-4 flex justify-center space-x-4">
-                <a href="#" class="text-gray-400 hover:text-[#D4A574]">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                    </svg>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-12 md:mb-16 animate-fade-in-up delay-300">
+                <a href="{{ route('menu') }}" class="w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-royal-900 font-bold uppercase tracking-widest text-xs md:text-sm rounded-full text-center hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] transition-all">
+                    Explore Our Menu
                 </a>
-                <a href="#" class="text-gray-400 hover:text-[#D4A574]">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
-                    </svg>
+
+                @guest
+                <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 border border-gold-500/50 text-gold-600 dark:text-gold-500 font-bold uppercase tracking-widest text-xs md:text-sm rounded-full hover:bg-gold-500/10 transition-all text-center backdrop-blur-sm">
+                    Reserve a Table
                 </a>
-                <a href="#" class="text-gray-400 hover:text-[#D4A574]">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                </a>
+                @endguest
+            </div>
+
+            <!-- Stats Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-3xl mx-auto border-t border-gold-500/20 pt-8 animate-fade-in-up delay-300">
+                <div class="text-center">
+                    <h3 class="text-2xl md:text-3xl font-serif text-gold-600 dark:text-gold-500 mb-1">15+</h3>
+                    <p class="text-[10px] md:text-xs text-brown/50 dark:text-gray-400 uppercase tracking-widest">Years of Excellence</p>
+                </div>
+                <div class="text-center sm:border-x border-gold-500/20">
+                    <h3 class="text-2xl md:text-3xl font-serif text-gold-600 dark:text-gold-500 mb-1">50+</h3>
+                    <p class="text-[10px] md:text-xs text-brown/50 dark:text-gray-400 uppercase tracking-widest">Signature Dishes</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-2xl md:text-3xl font-serif text-gold-600 dark:text-gold-500 mb-1">10k+</h3>
+                    <p class="text-[10px] md:text-xs text-brown/50 dark:text-gray-400 uppercase tracking-widest">Happy Guests</p>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- About Section -->
+    <div id="about" class="py-16 md:py-24 bg-cream dark:bg-royal-900 relative transition-colors duration-300">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                <div class="w-full md:w-1/2 relative">
+                    <div class="absolute -inset-2 md:-inset-4 border border-gold-500/20 rounded-2xl transform rotate-3"></div>
+                    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2070&auto=format&fit=crop"
+                         alt="Chef preparing food"
+                         class="relative rounded-2xl shadow-2xl w-full h-[300px] md:h-[500px] object-cover">
+                </div>
 
-    <script>
-        // Simple animations
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add fade-in animation to cards
-            const cards = document.querySelectorAll('.feature-card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.classList.add('animate-fadeIn');
-            });
+                <div class="w-full md:w-1/2">
+                    <h2 class="font-serif text-3xl md:text-5xl text-brown dark:text-white mb-4 md:mb-6">
+                        A Passion for <span class="text-gold-600 dark:text-gold-500">Perfection</span>
+                    </h2>
+                    <p class="text-brown/70 dark:text-gray-400 leading-relaxed mb-4 md:mb-6">
+                        At GustoBite, we believe that dining is not just about food; it's about an experience.
+                        Our chefs combine traditional techniques with modern innovation to create dishes that
+                        tantalize your taste buds and leave a lasting impression.
+                    </p>
+                    <p class="text-brown/70 dark:text-gray-400 leading-relaxed mb-6 md:mb-8">
+                        Every plate is a canvas, and every ingredient is carefully selected to ensure the highest
+                        quality and freshness. Join us for a journey of culinary discovery.
+                    </p>
+                    <!-- ✅ اتغيرت من discover لـ menu -->
+                    <a href="{{ route('menu') }}" class="inline-flex items-center text-gold-600 dark:text-gold-500 font-semibold hover:text-gold-500 dark:hover:text-gold-400 transition-colors">
+                        Explore Our Menu <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Add hover effect to buttons
-            const buttons = document.querySelectorAll('.btn-restaurant, .btn-outline-restaurant');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-3px)';
-                });
-                button.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    <!-- Featured Dishes Section -->
+    <div class="py-16 md:py-24 bg-royal-900">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="font-serif text-3xl md:text-4xl text-white mb-2 md:mb-4">Chef's <span class="text-gold-500">Specialties</span></h2>
+                <p class="text-gray-400 text-sm md:text-base">Handpicked dishes that define our culinary identity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- Dish 1 -->
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-royal-900 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-4 md:p-6">
+                        <h3 class="text-lg md:text-xl font-serif text-white mb-1">Premium Wagyu Steak</h3>
+                        <p class="text-gold-500 text-sm">$85.00</p>
+                    </div>
+                </div>
+                <!-- Dish 2 -->
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=2032&auto=format&fit=crop" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-royal-900 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-4 md:p-6">
+                        <h3 class="text-lg md:text-xl font-serif text-white mb-1">Truffle Tagliatelle</h3>
+                        <p class="text-gold-500 text-sm">$45.00</p>
+                    </div>
+                </div>
+                <!-- Dish 3 -->
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=2070&auto=format&fit=crop" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-royal-900 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 p-4 md:p-6">
+                        <h3 class="text-lg md:text-xl font-serif text-white mb-1">Gold Leaf Soufflé</h3>
+                        <p class="text-gold-500 text-sm">$25.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="py-16 md:py-24 bg-cream dark:bg-royal-800 transition-colors duration-300">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="font-serif text-3xl md:text-4xl text-brown dark:text-white mb-2 md:mb-4">What Our <span class="text-gold-600 dark:text-gold-500">Guests Say</span></h2>
+                <p class="text-brown/60 dark:text-gray-400 text-sm md:text-base">Real experiences from our valued diners.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white dark:bg-royal-900 p-6 md:p-8 rounded-2xl border border-gold-500/10 shadow-sm relative">
+                    <i class="fas fa-quote-left text-3xl text-gold-500/20 absolute top-6 right-6"></i>
+                    <div class="flex text-gold-500 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-brown/70 dark:text-gray-300 text-sm md:text-base italic mb-6">"An absolutely unforgettable dining experience. The ambiance, the service, and the food were all beyond exceptional."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-500 font-bold">S</div>
+                        <div>
+                            <h4 class="text-brown dark:text-white font-semibold text-sm">Sarah Johnson</h4>
+                            <p class="text-brown/50 dark:text-gray-500 text-xs">Food Critic</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="bg-white dark:bg-royal-900 p-6 md:p-8 rounded-2xl border border-gold-500/10 shadow-sm relative">
+                    <i class="fas fa-quote-left text-3xl text-gold-500/20 absolute top-6 right-6"></i>
+                    <div class="flex text-gold-500 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-brown/70 dark:text-gray-300 text-sm md:text-base italic mb-6">"The Wagyu steak was cooked to perfection. I've never tasted anything like it. Highly recommended!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-500 font-bold">M</div>
+                        <div>
+                            <h4 class="text-brown dark:text-white font-semibold text-sm">Michael Chen</h4>
+                            <p class="text-brown/50 dark:text-gray-500 text-xs">Regular Guest</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="bg-white dark:bg-royal-900 p-6 md:p-8 rounded-2xl border border-gold-500/10 shadow-sm relative">
+                    <i class="fas fa-quote-left text-3xl text-gold-500/20 absolute top-6 right-6"></i>
+                    <div class="flex text-gold-500 mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="text-brown/70 dark:text-gray-300 text-sm md:text-base italic mb-6">"Beautiful atmosphere and exquisite food. Perfect for a romantic dinner or a special celebration."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-500 font-bold">E</div>
+                        <div>
+                            <h4 class="text-brown dark:text-white font-semibold text-sm">Emma Williams</h4>
+                            <p class="text-brown/50 dark:text-gray-500 text-xs">Travel Blogger</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="relative py-20 md:py-32 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-royal-900/80"></div>
+        </div>
+        <div class="relative z-10 text-center px-4 md:px-6 max-w-3xl mx-auto">
+            <h2 class="font-serif text-3xl md:text-5xl text-white mb-4 md:mb-6">Ready to Experience <span class="text-gold-500 italic">Excellence?</span></h2>
+            <p class="text-gray-300 text-sm md:text-lg mb-8 md:mb-10">Book your table now and let us take you on a culinary journey you won't forget.</p>
+            <a href="{{ route('register') }}" class="inline-block px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-royal-900 font-bold uppercase tracking-widest text-xs md:text-sm rounded-full hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] transition-all">
+                Reserve Your Table
+            </a>
+        </div>
+    </div>
+
+</x-layouts.app>

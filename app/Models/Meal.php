@@ -23,19 +23,26 @@ class Meal extends Model
         'is_available' => 'boolean'
     ];
 
-    /**
-     * العلاقة مع الفئة
-     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
-     * خاصية للحصول على رابط الصورة
+     * ✅ دالة ذكية لمعرفة رابط الصورة (سواء كانت من النت أو مرفوعة على السيرفر)
      */
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        if (!$this->image) {
+            return null;
+        }
+
+        // لو الصورة رابط خارجي (http)
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+
+        // لو الصورة ملف مرفوع على السيرفر
+        return asset('storage/' . $this->image);
     }
 }

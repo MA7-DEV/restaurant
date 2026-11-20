@@ -1,26 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Styles for GustoBite Restaurant */
-@layer components {
-    .btn-restaurant {
-        @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#D4A574] to-[#E8C39E]
-               border border-transparent rounded-xl font-semibold text-sm text-white uppercase
-               tracking-widest hover:from-[#C8955C] hover:to-[#D8B284] focus:from-[#C8955C]
-               focus:to-[#D8B284] focus:outline-none focus:ring-2 focus:ring-[#D4A574]
-               focus:ring-offset-2 transition-all duration-300 ease-in-out shadow-md
-               hover:shadow-lg;
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    .input-restaurant {
-        @apply w-full px-4 py-3 bg-white/50 border border-[#E8C39E]/30 rounded-xl
-               focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 focus:bg-white
-               placeholder:text-gray-400 transition-all duration-300 shadow-sm;
-    }
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+}
 
-    .card-restaurant {
-        @apply bg-white/90 backdrop-blur-sm rounded-2xl border border-white/50
-               shadow-xl hover:shadow-2xl transition-all duration-300;
-    }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+
+/* ===== Loader Animation ===== */
+.loader {
+    border: 3px solid rgba(212, 175, 55, 0.1);
+    border-top: 3px solid #D4AF37;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== Custom Luxury Checkbox ===== */
+.luxury-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.luxury-checkbox:checked {
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    border-color: #D4AF37;
+}
+
+.luxury-checkbox:checked::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: #0A0A0A;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.luxury-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
