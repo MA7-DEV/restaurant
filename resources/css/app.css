@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Styles for GustoBite Restaurant */
+@layer components {
+    .btn-restaurant {
+        @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#D4A574] to-[#E8C39E]
+               border border-transparent rounded-xl font-semibold text-sm text-white uppercase
+               tracking-widest hover:from-[#C8955C] hover:to-[#D8B284] focus:from-[#C8955C]
+               focus:to-[#D8B284] focus:outline-none focus:ring-2 focus:ring-[#D4A574]
+               focus:ring-offset-2 transition-all duration-300 ease-in-out shadow-md
+               hover:shadow-lg;
+    }
+
+    .input-restaurant {
+        @apply w-full px-4 py-3 bg-white/50 border border-[#E8C39E]/30 rounded-xl
+               focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 focus:bg-white
+               placeholder:text-gray-400 transition-all duration-300 shadow-sm;
+    }
+
+    .card-restaurant {
+        @apply bg-white/90 backdrop-blur-sm rounded-2xl border border-white/50
+               shadow-xl hover:shadow-2xl transition-all duration-300;
+    }
+}
