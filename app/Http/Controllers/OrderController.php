@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meal;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Meal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,66 +14,116 @@ class OrderController extends Controller
     /**
      * حفظ الطلب الجديد (Checkout)
      */
+
+    /**
+     * Save a new order (Checkout).
+     */
     public function store(Request $request)
     {
-        // 1. منع الأدمن من عمل أوردر
+        // Prevent admin accounts from placing orders.
         if (auth()->user()->isAdmin()) {
             return back()->with('error', 'Admin accounts cannot place orders.');
         }
 
-        // 2. التحقق من البيانات
-        $request->validate([
+        $validated = $request->validate([
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
         ]);
 
-        // 3. جلب السلة من الـ Session
         $cart = session()->get('cart', []);
-        if (empty($cart)) {
+
+        if (empty($cart) || ! is_array($cart)) {
             return back()->with('error', 'Your cart is empty.');
         }
 
         try {
-            DB::beginTransaction();
+            $order = DB::transaction(function () use ($cart, $validated) {
+                $mealIds = [];
 
-            $totalPrice = 0;
+                // Validate cart structure and quantities.
+                foreach ($cart as $id => $item) {
+                    if (
+                        ! is_numeric($id) ||
+                        ! is_array($item) ||
+                        ! isset($item['quantity']) ||
+                        filter_var($item['quantity'], FILTER_VALIDATE_INT) === false ||
+                        (int) $item['quantity'] < 1 ||
+                        (int) $item['quantity'] > 99
+                    ) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'cart' => 'Your cart contains invalid quantities. Please review your cart.',
+                        ]);
+                    }
 
-            // 4. إنشاء الأوردر
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'status' => 'pending',
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'total_price' => 0, // هنحدثها بعدين
-            ]);
+                    $mealIds[] = (int) $id;
+                }
 
-            // 5. إضافة الأصناف وحساب الإجمالي
-            foreach ($cart as $id => $item) {
-                $meal = Meal::findOrFail($id);
-                $totalPrice += $meal->price * $item['quantity'];
+                // Lock meal records while checking availability and prices.
+                $meals = Meal::whereIn('id', $mealIds)
+                    ->lockForUpdate()
+                    ->get()
+                    ->keyBy('id');
 
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'meal_id' => $meal->id,
-                    'quantity' => $item['quantity'],
-                    'price' => $meal->price,
+                // Make sure every meal still exists and is available.
+                foreach ($cart as $id => $item) {
+                    $meal = $meals->get((int) $id);
+
+                    if (! $meal || ! $meal->is_available) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'cart' => 'One or more meals are unavailable. Please review your cart.',
+                        ]);
+                    }
+                }
+
+                $totalPrice = 0;
+
+                // Calculate the total using database prices.
+                foreach ($cart as $id => $item) {
+                    $meal = $meals->get((int) $id);
+                    $quantity = (int) $item['quantity'];
+
+                    $totalPrice += (float) $meal->price * $quantity;
+                }
+
+                // Create the order.
+                $order = Order::create([
+                    'user_id' => Auth::id(),
+                    'status' => 'pending',
+                    'address' => $validated['address'],
+                    'phone' => $validated['phone'],
+                    'total_price' => $totalPrice,
                 ]);
-            }
 
-            // 6. تحديث إجمالي الأوردر
-            $order->update(['total_price' => $totalPrice]);
+                // Create order items using trusted database data.
+                foreach ($cart as $id => $item) {
+                    $meal = $meals->get((int) $id);
 
-            // 7. ✅ تفريغ السلة من الـ Session
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'meal_id' => $meal->id,
+                        'quantity' => (int) $item['quantity'],
+                        'price' => $meal->price,
+                    ]);
+                }
+
+                return $order;
+            });
+
             session()->forget('cart');
 
-            DB::commit();
+            return redirect()
+                ->route('customer.dashboard')
+                ->with('success', 'Order placed successfully! Your cart is now empty.');
 
-            // 8. التوجيه لصفحة الداشبورد مع رسالة نجاح
-            return redirect()->route('customer.dashboard')->with('success', 'Order placed successfully! Your cart is now empty.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            report($e);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Failed to place order: ' . $e->getMessage());
+            return back()->with(
+                'error',
+                'Something went wrong while placing your order. Please try again.'
+            );
         }
     }
 
@@ -83,6 +133,7 @@ class OrderController extends Controller
     public function adminIndex()
     {
         $orders = Order::with(['user', 'items.meal'])->latest()->paginate(10);
+
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -92,7 +143,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,preparing,delivering,delivered,cancelled'
+            'status' => 'required|in:pending,preparing,delivering,delivered,cancelled',
         ]);
 
         $order->update(['status' => $request->status]);

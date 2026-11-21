@@ -64,47 +64,58 @@
     <!-- ✅ JavaScript (AJAX) -->
     <script>
         function updateCart(event, mealId) {
-            event.preventDefault();
+    event.preventDefault();
 
-            const form = event.target;
-            const quantity = form.querySelector('input[name="quantity"]').value;
+    const form = event.target;
+    const quantity = form.querySelector('input[name="quantity"]').value;
 
-            fetch('{{ route('cart.update') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ meal_id: mealId, quantity: parseInt(quantity) })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(err => console.error(err));
+    fetch('{{ route('cart.update') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            meal_id: mealId,
+            quantity: parseInt(quantity)
+        })
+    })
+    .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+            throw new Error(data.message || data.errors?.cart?.[0] || 'Could not update cart.');
         }
 
-        function removeItem(event, mealId) {
-            event.preventDefault();
+        return data;
+    })
+    .then(() => window.location.reload())
+    .catch(err => showNotification(err.message, 'error'));
+}
 
-            fetch('{{ route('cart.remove') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ meal_id: mealId })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(err => console.error(err));
+function removeItem(event, mealId) {
+    event.preventDefault();
+
+    fetch('{{ route('cart.remove') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ meal_id: mealId })
+    })
+    .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+            throw new Error(data.message || 'Could not remove this item.');
         }
+
+        return data;
+    })
+    .then(() => window.location.reload())
+    .catch(err => showNotification(err.message, 'error'));
+}
     </script>
 
 </x-layouts.app>

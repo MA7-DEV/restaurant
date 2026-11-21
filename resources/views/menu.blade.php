@@ -120,19 +120,34 @@
                 },
                 body: JSON.stringify({ meal_id: mealId, quantity: 1 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    // تحديث العداد في الـ Navbar
-                    const countEl = document.getElementById('cart-count');
-                    const countElMobile = document.getElementById('cart-count-mobile');
-                    if(countEl) { countEl.textContent = data.cart_count; countEl.style.display = 'flex'; }
-                    if(countElMobile) { countElMobile.textContent = data.cart_count; countElMobile.style.display = 'flex'; }
+            .then(async res => {
+    const data = await res.json();
 
-                    showNotification(data.message);
-                }
-            })
-            .catch(err => console.error(err));
+    if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Could not add this meal to your cart.');
+    }
+
+    return data;
+})
+.then(data => {
+    const countEl = document.getElementById('cart-count');
+    const countElMobile = document.getElementById('cart-count-mobile');
+
+    if (countEl) {
+        countEl.textContent = data.cart_count;
+        countEl.style.display = 'flex';
+    }
+
+    if (countElMobile) {
+        countElMobile.textContent = data.cart_count;
+        countElMobile.style.display = 'flex';
+    }
+
+    showNotification(data.message);
+})
+.catch(err => {
+    showNotification(err.message, 'error');
+});
         }
 
         function showNotification(message, type = 'success') {
